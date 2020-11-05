@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="1" assertions="3" errors="0" warnings="0" failures="0" skipped="0" time="0.479069">
+    <testsuite name="REST API Test Suite" tests="1" assertions="3" errors="0" warnings="0" failures="0" skipped="0" time="0.479069">
+      <testsuite name="UserAgentTest" file="D:\webstuff\htdocs\RestApiParkeren\tests\unit\SampleTest.php" tests="1" assertions="3" errors="0" warnings="0" failures="0" skipped="0" time="0.479069">
+        <testcase name="testGet" class="UserAgentTest" classname="UserAgentTest" file="D:\webstuff\htdocs\RestApiParkeren\tests\unit\SampleTest.php" line="20" assertions="3" time="0.479069"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

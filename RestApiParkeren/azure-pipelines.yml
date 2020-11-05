@@ -1,0 +1,79 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+      - feature/*
+
+pr:
+  branches:
+    include:
+      - master
+      - feature/*
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  phpVersion: 7.4.3
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+- script: |
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  displayName: 'Use PHP version $(phpVersion)'
+
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install'
+- script: phpunit
+  displayName: 'Run tests with phpunit'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    failTaskOnFailedTests: true
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'invalideparkerenapp'
+    projectKey: 'invalideparkeren' 
+    scannerMode: 'CLI'
+    configMode: 'file'
+    configFile: 'sonar-scanner.properties'
+    extraProperties: |
+            sonar.exclusions="**/vendor"
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: Artifact Directory'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+     **/api/**
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\deploy'
+    
+- task: SonarCloudAnalyze@1
+
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)\deploy'
+    artifactName: deployApi
+
+
+

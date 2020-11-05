@@ -1,0 +1,15 @@
+{
+    "require": {
+        "phpunit/phpunit": "^9.0",
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "autoload":{
+        "psr-4":{
+            "Api\\":"api"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    }
+
+}
